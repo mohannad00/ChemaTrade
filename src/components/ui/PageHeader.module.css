@@ -1,0 +1,8 @@
+.header { padding: calc(var(--header-h) + clamp(32px, 6vw, 72px)) 0 clamp(28px, 4vw, 48px); border-bottom: 1px solid var(--rule); }
+.header h1 { font-size: var(--step-4); max-width: 18ch; margin: 14px 0 18px; }
+.row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; padding-bottom: 18px; }
+.tag { margin-top: 18px; }
+.crumbs { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-2); }
+.crumbs ol { display: flex; flex-wrap: wrap; gap: 4px; }
+.crumbs a { color: var(--ink-2); }

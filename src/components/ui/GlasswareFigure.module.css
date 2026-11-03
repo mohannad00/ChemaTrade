@@ -1,0 +1,5 @@
+.figure { margin: 0; max-width: 540px; }
+.figure svg { width: 100%; height: auto; overflow: visible; }
+.lines path { fill: none; stroke: var(--ink-2); stroke-width: 1.2; stroke-linecap: square; stroke-linejoin: miter; vector-effect: non-scaling-stroke; }
+.label { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.figure figcaption { margin-top: 8px; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.04em; }

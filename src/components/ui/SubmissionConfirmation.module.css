@@ -1,0 +1,7 @@
+.box { border: 1px solid var(--ink); background: var(--paper-2); padding: clamp(24px, 4vw, 44px); display: flex; flex-direction: column; gap: 16px; max-width: 760px; outline: none; }
+.icon { width: 32px; height: 32px; color: var(--success); }
+.ref { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border: 1px dashed var(--ink); background: var(--paper); align-self: flex-start; }
+.ref strong { font-size: 1.25rem; letter-spacing: 0.04em; }
+.summary { color: var(--ink-2); }
+.warn { font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-2); border-left: 3px solid var(--ink); padding-left: 12px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }

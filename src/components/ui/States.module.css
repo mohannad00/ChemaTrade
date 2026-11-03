@@ -1,0 +1,8 @@
+.state { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 64px 20px; border: 1px solid var(--rule); color: var(--ink-2); }
+.state svg { width: 28px; height: 28px; color: var(--muted); }
+.text { max-width: 48ch; }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.notice { border: 1px solid var(--rule); border-left: 3px solid var(--accent); padding: 14px 16px; background: var(--paper-2); display: flex; flex-direction: column; gap: 4px; font-size: var(--step--1); color: var(--ink-2); }
+.notice p { font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5; }
+.noticeDemo { border-left-color: var(--ink); }
