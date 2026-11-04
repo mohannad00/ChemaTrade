@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useI18n } from '@/i18n/I18nProvider';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { PointerEffects } from './PointerEffects';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -15,14 +17,27 @@ function ScrollManager() {
   return null;
 }
 
+/** Re-runs the entrance animation whenever the route changes (the key remounts the wrapper). */
+function PageTransition() {
+  const { pathname } = useLocation();
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div ref={ref} key={pathname} className="page-enter">
+      <Outlet />
+    </div>
+  );
+}
+
 export function SiteLayout() {
+  const { t } = useI18n();
   return (
     <>
-      <a href="#main" className="skip-link">Skip to content</a>
+      <a href="#main" className="skip-link">{t('a11y.skip')}</a>
       <ScrollManager />
+      <PointerEffects />
       <Header />
       <main id="main" tabIndex={-1}>
-        <Outlet />
+        <PageTransition />
       </main>
       <Footer />
     </>

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { SelectField, TextAreaField, TextField } from '@/components/ui/Field';
 import { Notice } from '@/components/ui/States';
 import { SubmissionConfirmation } from '@/components/ui/SubmissionConfirmation';
-import { SIMULATION_NOTICE } from '@/config/app.config';
+import { useI18n } from '@/i18n/I18nProvider';
 import { useDocumentTitle } from '@/hooks/common';
 import { invalidateData } from '@/lib/dataVersion';
 import { hasErrors, type FieldErrors } from '@/lib/validation';
@@ -17,7 +17,8 @@ import styles from '@/components/forms/RequestForm.module.css';
 const EMPTY: MaintenanceFormValues = { fullName: '', organisation: '', email: '', phone: '', equipmentDescription: '', serviceType: '', urgency: 'Routine', details: '' };
 
 export function RequestMaintenancePage() {
-  useDocumentTitle('Request maintenance');
+  const { t, te } = useI18n();
+  useDocumentTitle(t('mreq.eyebrow'));
   const [values, setValues] = useState<MaintenanceFormValues>(EMPTY);
   const [errors, setErrors] = useState<FieldErrors<MaintenanceField>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -45,7 +46,7 @@ export function RequestMaintenancePage() {
       invalidateData();
       setDone(created);
     } catch (err) {
-      setFailure(err instanceof Error ? err.message : 'Submission failed.');
+      setFailure(err instanceof Error ? err.message : t('quote.failed'));
     } finally {
       setSubmitting(false);
     }
@@ -59,38 +60,38 @@ export function RequestMaintenancePage() {
 
   return (
     <>
-      <PageHeader eyebrow="Request maintenance" title="Describe the equipment and the problem" lede="Use this form to describe a service, repair, calibration or spare-part need. In this demo it is simulated: no booking is made and nothing reaches Chema Trade." demoTag />
+      <PageHeader eyebrow={t('mreq.eyebrow')} title={t('mreq.title')} lede={t('mreq.lede')} demoTag />
       <div className={`container ${styles.wrap}`}>
         {done ? (
           <SubmissionConfirmation
-            title="Maintenance request recorded (demo)"
+            title={t('mreq.doneTitle')}
             reference={done.reference}
             onAnother={reset}
-            anotherLabel="Submit another demo request"
+            anotherLabel={t('quote.another')}
             dashboardTo="/admin/maintenance"
-            summary={<p>{done.serviceType} — {done.equipmentDescription} ({done.urgency.toLowerCase()}). No appointment or visit has been booked.</p>}
+            summary={<p>{t('mreq.doneSummary', { service: te('service', done.serviceType), equipment: done.equipmentDescription, urgency: te('status', done.urgency) })}</p>}
           />
         ) : (
           <form className={styles.form} onSubmit={submit} noValidate aria-busy={submitting}>
-            <Notice tone="demo" title="Simulated form">{SIMULATION_NOTICE}</Notice>
+            <Notice tone="demo" title={t('quote.simTitle')}>{t('demo.simulation')}</Notice>
             <div className={styles.row}>
-              <TextField label="Full name" name="fullName" autoComplete="name" required value={values.fullName} onChange={set('fullName')} error={errors.fullName} />
-              <TextField label="Organisation" name="organisation" autoComplete="organization" required value={values.organisation} onChange={set('organisation')} error={errors.organisation} />
+              <TextField label={t('field.fullName')} name="fullName" autoComplete="name" required value={values.fullName} onChange={set('fullName')} error={errors.fullName} />
+              <TextField label={t('field.organisation')} name="organisation" autoComplete="organization" required value={values.organisation} onChange={set('organisation')} error={errors.organisation} />
             </div>
             <div className={styles.row}>
-              <TextField label="Email" name="email" type="email" autoComplete="email" required value={values.email} onChange={set('email')} error={errors.email} />
-              <TextField label="Phone (optional)" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={set('phone')} />
+              <TextField label={t('field.email')} name="email" type="email" autoComplete="email" required value={values.email} onChange={set('email')} error={errors.email} />
+              <TextField label={t('field.phone')} name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={set('phone')} />
             </div>
-            <TextField label="Equipment (type, make, model)" name="equipmentDescription" required value={values.equipmentDescription} onChange={set('equipmentDescription')} error={errors.equipmentDescription} />
+            <TextField label={t('field.equipment')} name="equipmentDescription" required value={values.equipmentDescription} onChange={set('equipmentDescription')} error={errors.equipmentDescription} />
             <div className={styles.row}>
-              <SelectField label="Service type" name="serviceType" required value={values.serviceType} onChange={set('serviceType')} error={errors.serviceType} placeholder="Select a service" options={MAINTENANCE_SERVICE_TYPES.map((s) => ({ value: s, label: s }))} />
-              <SelectField label="Urgency" name="urgency" required value={values.urgency} onChange={set('urgency')} error={errors.urgency} options={MAINTENANCE_URGENCIES.map((s) => ({ value: s, label: s }))} />
+              <SelectField label={t('field.serviceType')} name="serviceType" required value={values.serviceType} onChange={set('serviceType')} error={errors.serviceType} placeholder={t('mreq.selectService')} options={MAINTENANCE_SERVICE_TYPES.map((s) => ({ value: s, label: te('service', s) }))} />
+              <SelectField label={t('field.urgency')} name="urgency" required value={values.urgency} onChange={set('urgency')} error={errors.urgency} options={MAINTENANCE_URGENCIES.map((s) => ({ value: s, label: te('status', s) }))} />
             </div>
-            <TextAreaField label="Problem description" name="details" required value={values.details} onChange={set('details')} error={errors.details} hint="Symptoms, error messages, when it started, location." />
+            <TextAreaField label={t('field.problem')} name="details" required value={values.details} onChange={set('details')} error={errors.details} hint={t('mreq.problemHint')} />
             {failure && <p role="alert" className={styles.failure}>{failure}</p>}
             <div className={styles.actions}>
-              <Button type="submit" disabled={submitting}>{submitting ? 'Submitting (simulated)…' : 'Submit demo request'}</Button>
-              <span className="mono" aria-hidden="true">* required</span>
+              <Button type="submit" disabled={submitting}>{submitting ? t('quote.submitting') : t('quote.submit')}</Button>
+              <span aria-hidden="true">{t('common.requiredNote')}</span>
             </div>
           </form>
         )}

@@ -1,6 +1,6 @@
 .wrap { padding-block: 40px 0; }
-.form { display: flex; flex-direction: column; gap: 22px; max-width: 760px; }
+.form { border-radius: var(--r-lg); display: flex; flex-direction: column; gap: 22px; max-width: 760px; background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); box-shadow: var(--edge), var(--shadow-sm); padding: clamp(20px, 3vw, 36px); transition: transform var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease), background-color var(--dur-2) var(--ease); }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; color: var(--muted); }
-.failure { font-family: var(--font-mono); color: var(--danger); border: 1px solid var(--danger); padding: 10px 12px; }
+.actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 0.85rem; }
+.failure { color: var(--danger); border: 1px solid var(--danger); padding: 10px 14px; background: var(--field); }
 @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }

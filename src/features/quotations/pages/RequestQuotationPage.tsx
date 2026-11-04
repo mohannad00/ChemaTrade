@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/Button';
 import { SelectField, TextAreaField, TextField } from '@/components/ui/Field';
 import { Notice } from '@/components/ui/States';
 import { SubmissionConfirmation } from '@/components/ui/SubmissionConfirmation';
-import { SIMULATION_NOTICE } from '@/config/app.config';
+import { useI18n } from '@/i18n/I18nProvider';
+import { useLocalizedList } from '@/i18n/useLocalized';
 import { useDocumentTitle } from '@/hooks/common';
 import { useQuery } from '@/hooks/useQuery';
 import { invalidateData } from '@/lib/dataVersion';
@@ -19,9 +20,11 @@ import styles from '@/components/forms/RequestForm.module.css';
 const EMPTY: QuotationFormValues = { fullName: '', organisation: '', email: '', phone: '', equipmentSlug: '', quantity: '1', details: '' };
 
 export function RequestQuotationPage() {
-  useDocumentTitle('Request a quotation');
+  const { t, te } = useI18n();
+  useDocumentTitle(t('quote.eyebrow'));
   const [params] = useSearchParams();
-  const equipment = useQuery(() => services.equipment.list(), []);
+  const equipmentQ = useQuery(() => services.equipment.list(), []);
+  const equipment = { ...equipmentQ, data: useLocalizedList(equipmentQ.data) };
   const [values, setValues] = useState<QuotationFormValues>({ ...EMPTY, equipmentSlug: params.get('equipment') ?? '' });
   const [errors, setErrors] = useState<FieldErrors<QuotationField>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -45,12 +48,12 @@ export function RequestQuotationPage() {
     setSubmitting(true);
     setFailure(null);
     try {
-      const name = equipment.data?.find((x) => x.slug === values.equipmentSlug)?.name ?? '';
+      const name = equipmentQ.data?.find((x) => x.slug === values.equipmentSlug)?.name ?? '';
       const created = await services.quotations.create(toQuotationInput(values, name));
       invalidateData();
       setDone(created);
     } catch (err) {
-      setFailure(err instanceof Error ? err.message : 'Submission failed.');
+      setFailure(err instanceof Error ? err.message : t('quote.failed'));
     } finally {
       setSubmitting(false);
     }
@@ -64,37 +67,37 @@ export function RequestQuotationPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Request a quotation" title="Tell us what you need" lede="Describe the equipment and your requirements. In this demo the form is simulated: it will not reach Chema Trade." demoTag />
+      <PageHeader eyebrow={t('quote.eyebrow')} title={t('quote.title')} lede={t('quote.lede')} demoTag />
       <div className={`container ${styles.wrap}`}>
         {done ? (
           <SubmissionConfirmation
-            title="Quotation request recorded (demo)"
+            title={t('quote.doneTitle')}
             reference={done.reference}
             onAnother={reset}
-            anotherLabel="Submit another demo request"
+            anotherLabel={t('quote.another')}
             dashboardTo="/admin/quotations"
-            summary={<p>{done.quantity} × {done.equipmentName} for {done.organisation}. In a live system Chema Trade would review the request and reply by the contact details provided.</p>}
+            summary={<p>{t('quote.doneSummary', { qty: done.quantity, equipment: done.equipmentSlug ? (equipment.data?.find((x) => x.slug === done.equipmentSlug)?.name ?? done.equipmentName) : te('misc', done.equipmentName), org: done.organisation })}</p>}
           />
         ) : (
           <form className={styles.form} onSubmit={submit} noValidate aria-busy={submitting}>
-            <Notice tone="demo" title="Simulated form">{SIMULATION_NOTICE}</Notice>
+            <Notice tone="demo" title={t('quote.simTitle')}>{t('demo.simulation')}</Notice>
             <div className={styles.row}>
-              <TextField label="Full name" name="fullName" autoComplete="name" required value={values.fullName} onChange={set('fullName')} error={errors.fullName} />
-              <TextField label="Organisation" name="organisation" autoComplete="organization" required value={values.organisation} onChange={set('organisation')} error={errors.organisation} />
+              <TextField label={t('field.fullName')} name="fullName" autoComplete="name" required value={values.fullName} onChange={set('fullName')} error={errors.fullName} />
+              <TextField label={t('field.organisation')} name="organisation" autoComplete="organization" required value={values.organisation} onChange={set('organisation')} error={errors.organisation} />
             </div>
             <div className={styles.row}>
-              <TextField label="Email" name="email" type="email" autoComplete="email" required value={values.email} onChange={set('email')} error={errors.email} />
-              <TextField label="Phone (optional)" name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={set('phone')} />
+              <TextField label={t('field.email')} name="email" type="email" autoComplete="email" required value={values.email} onChange={set('email')} error={errors.email} />
+              <TextField label={t('field.phone')} name="phone" type="tel" autoComplete="tel" value={values.phone} onChange={set('phone')} />
             </div>
             <div className={styles.row}>
-              <SelectField label="Equipment of interest" name="equipmentSlug" value={values.equipmentSlug} onChange={set('equipmentSlug')} placeholder="General enquiry / not listed" options={(equipment.data ?? []).map((x) => ({ value: x.slug, label: x.name }))} hint={equipment.status === 'loading' ? 'Loading sample catalog…' : 'Sample catalog items only.'} />
-              <TextField label="Quantity" name="quantity" type="number" inputMode="numeric" min={1} max={9999} required value={values.quantity} onChange={set('quantity')} error={errors.quantity} />
+              <SelectField label={t('quote.equipmentOfInterest')} name="equipmentSlug" value={values.equipmentSlug} onChange={set('equipmentSlug')} placeholder={t('quote.general')} options={(equipment.data ?? []).map((x) => ({ value: x.slug, label: x.name }))} hint={equipment.status === 'loading' ? t('quote.loadingCatalog') : t('quote.catalogHint')} />
+              <TextField label={t('field.quantity')} name="quantity" type="number" inputMode="numeric" min={1} max={9999} required value={values.quantity} onChange={set('quantity')} error={errors.quantity} />
             </div>
-            <TextAreaField label="Requirements" name="details" required value={values.details} onChange={set('details')} error={errors.details} hint="Application, capacity or range, standards, delivery location, timeline." />
+            <TextAreaField label={t('field.requirements')} name="details" required value={values.details} onChange={set('details')} error={errors.details} hint={t('quote.requirementsHint')} />
             {failure && <p role="alert" className={styles.failure}>{failure}</p>}
             <div className={styles.actions}>
-              <Button type="submit" disabled={submitting}>{submitting ? 'Submitting (simulated)…' : 'Submit demo request'}</Button>
-              <span className="mono" aria-hidden="true">* required</span>
+              <Button type="submit" disabled={submitting}>{submitting ? t('quote.submitting') : t('quote.submit')}</Button>
+              <span aria-hidden="true">{t('common.requiredNote')}</span>
             </div>
           </form>
         )}

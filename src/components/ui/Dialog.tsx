@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { useEffect, useId, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { useI18n } from '@/i18n/I18nProvider';
 import { Button } from './Button';
 import styles from './Dialog.module.css';
 
@@ -17,6 +18,7 @@ interface DialogProps {
 export function Dialog({ open, title, onClose, children, footer, wide }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const { t } = useI18n();
 
   useEffect(() => {
     const el = ref.current;
@@ -46,7 +48,7 @@ export function Dialog({ open, title, onClose, children, footer, wide }: DialogP
         <div className={styles.inner}>
           <header className={styles.head}>
             <h2 id={titleId}>{title}</h2>
-            <button type="button" className={styles.close} onClick={onClose} aria-label="Close dialog">
+            <button type="button" className={styles.close} onClick={onClose} aria-label={t('common.closeDialog')}>
               <X aria-hidden="true" />
             </button>
           </header>
@@ -69,6 +71,7 @@ interface ConfirmProps {
 }
 
 export function ConfirmDialog({ open, title, message, confirmLabel, busy, onConfirm, onCancel }: ConfirmProps) {
+  const { t } = useI18n();
   return (
     <Dialog
       open={open}
@@ -76,8 +79,8 @@ export function ConfirmDialog({ open, title, message, confirmLabel, busy, onConf
       onClose={onCancel}
       footer={
         <>
-          <Button variant="secondary" onClick={onCancel} disabled={busy}>Cancel</Button>
-          <Button variant="danger" onClick={onConfirm} disabled={busy}>{busy ? 'Working…' : confirmLabel}</Button>
+          <Button variant="secondary" onClick={onCancel} disabled={busy}>{t('common.cancel')}</Button>
+          <Button variant="danger" onClick={onConfirm} disabled={busy}>{busy ? t('common.working') : confirmLabel}</Button>
         </>
       }
     >

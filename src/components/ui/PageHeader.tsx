@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import { useI18n } from '@/i18n/I18nProvider';
 import { DemoTag } from './Badge';
 import styles from './PageHeader.module.css';
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function PageHeader({ eyebrow, title, lede, demoTag, actions }: Props) {
+  const { t } = useI18n();
   return (
     <header className={styles.header}>
       <div className="container">
@@ -21,15 +23,16 @@ export function PageHeader({ eyebrow, title, lede, demoTag, actions }: Props) {
           {actions && <div className={styles.actions}>{actions}</div>}
         </div>
         {lede && <p className="lede">{lede}</p>}
-        {demoTag && <div className={styles.tag}><DemoTag>Sample content — demo</DemoTag></div>}
+        {demoTag && <div className={styles.tag}><DemoTag>{t('common.sampleDemo')}</DemoTag></div>}
       </div>
     </header>
   );
 }
 
 export function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
+  const { t } = useI18n();
   return (
-    <nav aria-label="Breadcrumb" className={styles.crumbs}>
+    <nav aria-label={t('common.breadcrumb')} className={styles.crumbs}>
       <ol>
         {items.map((it, i) => (
           <li key={it.label}>

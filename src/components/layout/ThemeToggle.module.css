@@ -1,0 +1,6 @@
+.toggle { display: inline-grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--field); color: var(--ink); cursor: pointer; overflow: hidden; transition: transform var(--dur-2) var(--ease-spring), border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease); }
+.toggle:hover { border-color: var(--coral); color: var(--coral-ink); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.toggle:active { transform: scale(0.92); }
+.toggle svg { width: 18px; height: 18px; animation: spinIn 0.5s var(--ease-spring); }
+@keyframes spinIn { from { transform: rotate(-90deg) scale(0.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .toggle svg { animation: none; } .toggle:hover { transform: none; } }

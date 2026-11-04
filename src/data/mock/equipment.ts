@@ -6,7 +6,7 @@ const T = '2026-09-14T09:00:00.000Z';
  * SAMPLE CONTENT ONLY. Generic, brand-free examples used to demonstrate the design.
  * Specifications are illustrative and must not be relied upon.
  */
-export const mockEquipment: Equipment[] = [
+const baseEquipment: Equipment[] = [
   {
     id: 'eq-001', slug: 'binocular-compound-microscope-demo', name: 'Binocular Compound Microscope', categoryId: 'cat-microscopy', status: 'Available', featured: true, isDemo: true, updatedAt: T,
     summary: 'Sample entry: LED-illuminated binocular microscope for teaching and routine laboratory observation.',
@@ -87,3 +87,7 @@ export const mockEquipment: Equipment[] = [
     specs: [{ label: 'Width', value: '1200 mm (illustrative)' }, { label: 'Sash', value: 'Vertical sliding' }, { label: 'Work surface', value: 'Chemical-resistant' }],
   },
 ];
+
+import { equipmentAr } from './content.ar';
+
+export const mockEquipment: Equipment[] = baseEquipment.map((e) => ({ ...e, image: `/images/equipment/${e.slug}.svg`, i18n: { ar: equipmentAr[e.id] } }));

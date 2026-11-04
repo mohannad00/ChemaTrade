@@ -14,9 +14,3 @@ export const APP_CONFIG = {
   demoStorageKey: 'chematrade.demo.state.v1',
   demoSessionKey: 'chematrade.demo.admin-session.v1',
 } as const;
-
-export const DEMO_DISCLAIMER =
-  'Demo content: all products, specifications and requests shown are samples. Availability and specifications must be confirmed by Chema Trade.';
-
-export const SIMULATION_NOTICE =
-  'This is a simulated submission. Nothing has been sent to Chema Trade, and no email, WhatsApp message, supplier order or booking has been made.';

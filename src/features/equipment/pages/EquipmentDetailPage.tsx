@@ -2,19 +2,21 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from '@/components/ui/PageHeader';
 import { Badge, DemoTag } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { EquipmentImage } from '@/components/ui/EquipmentImage';
 import { ErrorState, LoadingState, Notice } from '@/components/ui/States';
-import { DEMO_DISCLAIMER } from '@/config/app.config';
 import { useDocumentTitle } from '@/hooks/common';
 import { useQuery } from '@/hooks/useQuery';
+import { useI18n } from '@/i18n/I18nProvider';
+import { useLocalizedItem, useLocalizedList } from '@/i18n/useLocalized';
 import { services } from '@/services';
 import { NotFoundContent } from '@/features/company/pages/NotFoundPage';
-import { formatDate } from '@/lib/format';
 import { EquipmentCard } from '../components/EquipmentCard';
 import styles from './EquipmentDetailPage.module.css';
 
 export function EquipmentDetailPage() {
   const { slug = '' } = useParams();
-  const item = useQuery(() => services.equipment.getBySlug(slug), [slug]);
+  const { t, formatDate } = useI18n();
+  const raw = useQuery(() => services.equipment.getBySlug(slug), [slug]);
   const categories = useQuery(() => services.categories.list(), []);
   const related = useQuery(
     async () => {
@@ -26,46 +28,51 @@ export function EquipmentDetailPage() {
     },
     [slug],
   );
-  useDocumentTitle(item.data?.name ?? 'Equipment');
+  const item = useLocalizedItem(raw.data);
+  const cats = useLocalizedList(categories.data);
+  const relatedItems = useLocalizedList(related.data);
+  useDocumentTitle(item?.name ?? t('common.equipment'));
 
-  if (item.status === 'loading') return <div className={`container ${styles.pad}`}><LoadingState label="Loading equipment…" /></div>;
-  if (item.status === 'error') return <div className={`container ${styles.pad}`}><ErrorState message={item.error.message} onRetry={item.retry} /></div>;
-  if (!item.data) return <NotFoundContent title="Equipment not found" message="This sample item does not exist, or was deleted in the demo dashboard." backTo="/equipment" backLabel="Back to catalog" />;
+  if (raw.status === 'loading') return <div className={`container ${styles.pad}`}><LoadingState label={t('catalog.loading')} /></div>;
+  if (raw.status === 'error') return <div className={`container ${styles.pad}`}><ErrorState message={raw.error.message} onRetry={raw.retry} /></div>;
+  if (!item) return <NotFoundContent title={t('detail.notFoundTitle')} message={t('detail.notFoundText')} backTo="/equipment" backLabel={t('detail.back')} />;
 
-  const e = item.data;
-  const category = categories.data?.find((c) => c.id === e.categoryId);
+  const category = cats?.find((c) => c.id === item.categoryId);
 
   return (
     <article className={`container ${styles.wrap}`}>
-      <Breadcrumbs items={[{ label: 'Equipment', to: '/equipment' }, ...(category ? [{ label: category.name, to: `/equipment?category=${category.slug}` }] : []), { label: e.name }]} />
+      <Breadcrumbs items={[{ label: t('nav.equipment'), to: '/equipment' }, ...(category ? [{ label: category.name, to: `/equipment?category=${category.slug}` }] : []), { label: item.name }]} />
       <div className={styles.head}>
         <div>
-          <p className="eyebrow">{category?.name ?? 'Equipment'}</p>
-          <h1>{e.name}</h1>
-          <p className="lede">{e.summary}</p>
-          <div className={styles.badges}><Badge>{e.status}</Badge><DemoTag>Demo content</DemoTag></div>
+          <p className="eyebrow">{category?.name ?? t('common.equipment')}</p>
+          <h1>{item.name}</h1>
+          <p className="lede">{item.summary}</p>
+          <div className={styles.badges}><Badge>{item.status}</Badge><DemoTag>{t('common.demoContent')}</DemoTag></div>
         </div>
+        <div className={styles.side}>
+        <EquipmentImage src={item.image} name={item.name} className={styles.hero} eager />
         <div className={styles.aside}>
-          <p className="eyebrow">Next step</p>
-          <p>Ask Chema Trade to confirm availability, configuration and a real quotation for this type of equipment.</p>
-          <Button to={`/request-quote?equipment=${e.slug}`}>Request a quotation</Button>
-          <Button to="/contact" variant="secondary">Ask a question</Button>
+          <p className="eyebrow">{t('detail.nextStep')}</p>
+          <p>{t('detail.nextText')}</p>
+          <Button to={`/request-quote?equipment=${item.slug}`}>{t('detail.request')}</Button>
+          <Button to="/contact" variant="secondary">{t('detail.ask')}</Button>
+        </div>
         </div>
       </div>
 
       <div className={styles.body}>
         <section aria-labelledby="desc-h">
-          <h2 id="desc-h">Description</h2>
-          <p className={styles.desc}>{e.description}</p>
-          {e.illustrativePrice && <p className={`mono ${styles.price}`}>{e.illustrativePrice}</p>}
+          <h2 id="desc-h">{t('detail.description')}</h2>
+          <p className={styles.desc}>{item.description}</p>
+          {item.illustrativePrice && <p className={styles.price}>{item.illustrativePrice}</p>}
         </section>
         <section aria-labelledby="spec-h">
-          <h2 id="spec-h">Technical specifications</h2>
-          <p className={`mono ${styles.specNote}`}>Sample specifications — illustrative only.</p>
+          <h2 id="spec-h">{t('detail.specs')}</h2>
+          <p className={styles.specNote}>{t('detail.specNote')}</p>
           <table className={styles.specs}>
-            <caption className="visually-hidden">Sample technical specifications for {e.name}</caption>
+            <caption className="visually-hidden">{t('detail.specCaption', { name: item.name })}</caption>
             <tbody>
-              {e.specs.map((s) => (
+              {item.specs.map((s) => (
                 <tr key={s.label}><th scope="row">{s.label}</th><td>{s.value}</td></tr>
               ))}
             </tbody>
@@ -73,13 +80,13 @@ export function EquipmentDetailPage() {
         </section>
       </div>
 
-      <Notice tone="demo" title="Confirm before relying on this">{DEMO_DISCLAIMER} Last edited in the demo: {formatDate(e.updatedAt)}.</Notice>
+      <Notice tone="demo" title={t('detail.confirmTitle')}>{t('demo.disclaimer')} {t('detail.lastEdited', { date: formatDate(item.updatedAt) })}</Notice>
 
-      {related.status === 'success' && related.data.length > 0 && (
+      {relatedItems && relatedItems.length > 0 && (
         <section aria-labelledby="rel-h" className={styles.related}>
-          <h2 id="rel-h">Related sample equipment</h2>
-          <ul className={styles.relGrid}>
-            {related.data.map((r) => <li key={r.id}><EquipmentCard item={r} categoryName={category?.name} /></li>)}
+          <h2 id="rel-h">{t('detail.related')}</h2>
+          <ul className={`${styles.relGrid} stagger`}>
+            {relatedItems.map((r) => <li key={r.id}><EquipmentCard item={r} categoryName={category?.name} /></li>)}
           </ul>
         </section>
       )}

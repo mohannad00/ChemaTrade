@@ -33,12 +33,18 @@ function isDemoState(v: unknown): v is DemoState {
   return ['equipment', 'articles', 'quotations', 'maintenance'].every((k) => Array.isArray(o[k]));
 }
 
+/** Sessions saved before images existed: give seeded items their image. An empty string means the image was cleared on purpose. */
+function withSeedImages(s: DemoState): DemoState {
+  const images = new Map(mockEquipment.map((e) => [e.id, e.image]));
+  return { ...s, equipment: s.equipment.map((e) => (e.image === undefined && images.has(e.id) ? { ...e, image: images.get(e.id) } : e)) };
+}
+
 function load(): DemoState {
   const raw = safeStorage.get(APP_CONFIG.demoStorageKey);
   if (!raw) return seed();
   try {
     const parsed: unknown = JSON.parse(raw);
-    return isDemoState(parsed) ? parsed : seed();
+    return isDemoState(parsed) ? withSeedImages(parsed) : seed();
   } catch {
     return seed();
   }

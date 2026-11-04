@@ -3,7 +3,7 @@ import type { Article } from '@/features/resources/resources.types';
 const base = { author: 'Chema Trade (demo editorial)', isDemo: true as const };
 
 /** SAMPLE EDITORIAL CONTENT: general laboratory-practice notes written for the demo. */
-export const mockArticles: Article[] = [
+const baseArticles: Article[] = [
   {
     ...base, id: 'ar-001', slug: 'choosing-an-analytical-balance', title: 'Choosing an analytical balance: readability, capacity and environment', tag: 'Weighing', status: 'Published', publishedAt: '2026-08-12T08:00:00.000Z', updatedAt: '2026-08-12T08:00:00.000Z',
     excerpt: 'Readability is only part of the story. Capacity, draft control and bench location all shape real-world weighing performance.',
@@ -30,3 +30,7 @@ export const mockArticles: Article[] = [
     body: 'Draft article. State the application, the required capacity or range, any standards you must meet, and your site constraints.\n\n## Include delivery and installation needs\n\nMention the delivery location, whether installation or training is required, and your target timeline.',
   },
 ];
+
+import { articlesAr } from './content.ar';
+
+export const mockArticles: Article[] = baseArticles.map((a) => ({ ...a, i18n: { ar: articlesAr[a.id] } }));

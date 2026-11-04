@@ -3,9 +3,11 @@
 .wrap { padding-block: 40px 0; display: flex; flex-direction: column; gap: 28px; }
 .text h2:first-child { margin-top: 0; }
 .contact { padding-block: 40px 0; display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(24px, 5vw, 64px); align-items: start; }
+.details { border-radius: var(--r-lg); background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); box-shadow: var(--edge), var(--shadow-sm); padding: 8px 24px; transition: transform var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease), background-color var(--dur-2) var(--ease); }
 .details li { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--rule); }
-.details li:first-child { border-top: 1px solid var(--ink); }
-.details svg { width: 20px; height: 20px; color: var(--accent); margin-top: 2px; flex: none; }
-.form { display: flex; flex-direction: column; gap: 20px; }
-.sent { border: 1px solid var(--ink); background: var(--paper-2); padding: 28px; display: grid; gap: 14px; outline: none; justify-items: start; }
+.details li:last-child { border-bottom: 0; }
+.details svg { width: 22px; height: 22px; color: var(--coral-ink); margin-top: 2px; flex: none; }
+.details p { color: var(--ink-2); }
+.form { border-radius: var(--r-lg); display: flex; flex-direction: column; gap: 20px; background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); box-shadow: var(--edge), var(--shadow-sm); padding: clamp(20px, 3vw, 32px); transition: transform var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease), background-color var(--dur-2) var(--ease); }
+.sent { border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(10px); box-shadow: var(--edge), var(--shadow-md); padding: 28px; display: grid; gap: 14px; outline: none; justify-items: start; transition: transform var(--dur-3) var(--ease), box-shadow var(--dur-3) var(--ease), background-color var(--dur-2) var(--ease); }
 @media (max-width: 860px) { .contact { grid-template-columns: 1fr; } }

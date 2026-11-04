@@ -6,8 +6,8 @@ import { Dialog } from '@/components/ui/Dialog';
 import { EmptyState, ErrorState, LoadingState } from '@/components/ui/States';
 import { useDebouncedValue, useDocumentTitle } from '@/hooks/common';
 import { useQuery } from '@/hooks/useQuery';
+import { useI18n } from '@/i18n/I18nProvider';
 import { invalidateData } from '@/lib/dataVersion';
-import { formatDate } from '@/lib/format';
 import { services } from '@/services';
 import { QUOTATION_STATUSES, type QuotationRequest, type QuotationStatus } from '@/features/quotations/quotations.types';
 import { MAINTENANCE_STATUSES, type MaintenanceRequest, type MaintenanceStatus } from '@/features/maintenance/maintenance.types';
@@ -21,7 +21,6 @@ interface Row {
   status: string;
   organisation: string;
   fullName: string;
-  email: string;
   isSample: boolean;
   subject: string;
   extra: string;
@@ -40,7 +39,8 @@ interface BoardProps {
 }
 
 function RequestBoard({ title, kind, statuses, rows, loading, error, retry, onStatus, detail }: BoardProps) {
-  useDocumentTitle(`${title} (demo)`);
+  const { t, te, formatDate } = useI18n();
+  useDocumentTitle(title);
   const [filter, setFilter] = useState('');
   const [term, setTerm] = useState('');
   const search = useDebouncedValue(term, 200).trim().toLowerCase();
@@ -57,9 +57,9 @@ function RequestBoard({ title, kind, statuses, rows, loading, error, retry, onSt
     setPending(id);
     try {
       await onStatus(id, status);
-      setFlash(`Status updated to “${status}”.`);
+      setFlash(t('board.statusUpdated', { status: te('status', status) }));
     } catch (e) {
-      setFlash(e instanceof Error ? e.message : 'Update failed.');
+      setFlash(e instanceof Error ? e.message : t('board.updateFailed'));
     } finally {
       setPending(null);
     }
@@ -72,11 +72,15 @@ function RequestBoard({ title, kind, statuses, rows, loading, error, retry, onSt
       <div className={styles.head}>
         <h1>{title}</h1>
         <div className={styles.tools}>
-          <div className={styles.tool}><label className="eyebrow" htmlFor={`${kind}-q`}>Search</label><input id={`${kind}-q`} type="search" value={term} onChange={(e) => setTerm(e.target.value)} placeholder="Reference, name, organisation" /></div>
-          <div className={styles.tool}><label className="eyebrow" htmlFor={`${kind}-f`}>Status</label>
+          <div className={styles.tool}>
+            <label className="eyebrow" htmlFor={`${kind}-q`}>{t('common.search')}</label>
+            <input id={`${kind}-q`} type="search" value={term} onChange={(e) => setTerm(e.target.value)} placeholder={t('board.searchPlaceholder')} />
+          </div>
+          <div className={styles.tool}>
+            <label className="eyebrow" htmlFor={`${kind}-f`}>{t('col.status')}</label>
             <select id={`${kind}-f`} value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <option value="">All statuses</option>
-              {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
+              <option value="">{t('board.allStatuses')}</option>
+              {statuses.map((s) => <option key={s} value={s}>{te('status', s)}</option>)}
             </select>
           </div>
         </div>
@@ -84,31 +88,46 @@ function RequestBoard({ title, kind, statuses, rows, loading, error, retry, onSt
       {flash && <div role="status" className={styles.flash}>{flash}</div>}
       {loading && <LoadingState />}
       {error && <ErrorState message={error.message} onRetry={retry} />}
-      {!loading && !error && shown.length === 0 && <EmptyState title="No requests match">Adjust the search or status filter. Requests submitted through the public forms appear here during this session.</EmptyState>}
+      {!loading && !error && shown.length === 0 && <EmptyState title={t('board.emptyTitle')}>{t('board.emptyText')}</EmptyState>}
       {!loading && !error && shown.length > 0 && (
         <div className={styles.tableWrap}>
           <table className={styles.table}>
-            <thead><tr><th>Reference</th><th>Contact</th><th>{kind === 'quotation' ? 'Equipment' : 'Service'}</th><th>Received</th><th>Status</th><th><span className="visually-hidden">Actions</span></th></tr></thead>
+            <thead>
+              <tr>
+                <th>{t('col.reference')}</th><th>{t('col.contact')}</th>
+                <th>{kind === 'quotation' ? t('col.equipment') : t('col.service')}</th>
+                <th>{t('col.received')}</th><th>{t('col.status')}</th>
+                <th><span className="visually-hidden">{t('common.actions')}</span></th>
+              </tr>
+            </thead>
             <tbody>
               {shown.map((r) => (
                 <tr key={r.id}>
-                  <td><span className="mono">{r.reference}</span><br />{r.isSample ? <span className={styles.sub}>sample</span> : <Badge>New</Badge>}</td>
+                  <td>
+                    <span className={`mono ${styles.ltr}`}>{r.reference}</span>
+                    <br />
+                    {r.isSample ? <span className={styles.sub}>{t('common.sample')}</span> : <Badge tone="demo">{t('board.submitted')}</Badge>}
+                  </td>
                   <td><div className={styles.name}>{r.organisation}</div><div className={styles.sub}>{r.fullName}</div></td>
                   <td>{r.subject}<div className={styles.sub}>{r.extra}</div></td>
                   <td>{formatDate(r.createdAt)}</td>
                   <td>
-                    <select className={styles.statusSelect} aria-label={`Status for ${r.reference}`} value={r.status} disabled={pending === r.id} onChange={(e) => void change(r.id, e.target.value)}>
-                      {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
+                    <select className={styles.statusSelect} aria-label={t('board.statusFor', { ref: r.reference })} value={r.status} disabled={pending === r.id} onChange={(e) => void change(r.id, e.target.value)}>
+                      {statuses.map((s) => <option key={s} value={s}>{te('status', s)}</option>)}
                     </select>
                   </td>
-                  <td><div className={styles.rowActions}><button type="button" className={styles.iconBtn} aria-label={`View details of ${r.reference}`} onClick={() => setViewing(r.id)}><Eye aria-hidden="true" /></button></div></td>
+                  <td>
+                    <div className={styles.rowActions}>
+                      <button type="button" className={styles.iconBtn} aria-label={t('board.view', { ref: r.reference })} onClick={() => setViewing(r.id)}><Eye aria-hidden="true" /></button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-      <Dialog open={!!fields} title="Request details" onClose={() => setViewing(null)} wide footer={<Button variant="secondary" onClick={() => setViewing(null)}>Close</Button>}>
+      <Dialog open={!!fields} title={t('board.detailsTitle')} onClose={() => setViewing(null)} wide footer={<Button variant="secondary" onClick={() => setViewing(null)}>{t('common.close')}</Button>}>
         {fields && <dl className={styles.dl}>{fields.map(([k, v]) => <Fragment key={k}><dt>{k}</dt><dd>{v}</dd></Fragment>)}</dl>}
       </Dialog>
     </>
@@ -116,36 +135,48 @@ function RequestBoard({ title, kind, statuses, rows, loading, error, retry, onSt
 }
 
 export function AdminQuotationsPage() {
+  const { t, te, formatDate } = useI18n();
   const q = useQuery(() => services.quotations.list(), []);
   const list: QuotationRequest[] | undefined = q.data;
-  const rows: Row[] | undefined = list?.map((x) => ({ id: x.id, reference: x.reference, createdAt: x.createdAt, status: x.status, organisation: x.organisation, fullName: x.fullName, email: x.email, isSample: x.isSample, subject: x.equipmentName, extra: `Qty ${x.quantity}` }));
+  const subject = (x: QuotationRequest) => te('misc', x.equipmentName);
+  const rows: Row[] | undefined = list?.map((x) => ({ id: x.id, reference: x.reference, createdAt: x.createdAt, status: x.status, organisation: x.organisation, fullName: x.fullName, isSample: x.isSample, subject: subject(x), extra: t('board.qty', { n: x.quantity }) }));
   return (
     <RequestBoard
-      title="Quotation requests" kind="quotation" statuses={QUOTATION_STATUSES}
+      title={t('board.quotationsTitle')} kind="quotation" statuses={QUOTATION_STATUSES}
       rows={rows} loading={q.status === 'loading'} error={q.error} retry={q.retry}
       onStatus={async (id, s) => { await services.quotations.updateStatus(id, s as QuotationStatus); invalidateData(); }}
       detail={(id) => {
         const x = list?.find((r) => r.id === id);
-        return x ? [['Reference', x.reference], ['Received', formatDate(x.createdAt)], ['Status', x.status], ['Name', x.fullName], ['Organisation', x.organisation], ['Email', x.email], ['Phone', x.phone ?? '—'], ['Equipment', x.equipmentName], ['Quantity', String(x.quantity)], ['Requirements', x.details], ['Origin', x.isSample ? 'Pre-loaded sample' : 'Submitted in this browser (simulated)']] : null;
+        return x ? [
+          [t('col.reference'), x.reference], [t('board.received'), formatDate(x.createdAt)], [t('col.status'), te('status', x.status)],
+          [t('field.fullName'), x.fullName], [t('field.organisation'), x.organisation], [t('field.email'), x.email], [t('field.phone'), x.phone ?? '—'],
+          [t('col.equipment'), subject(x)], [t('field.quantity'), String(x.quantity)], [t('field.requirements'), x.details],
+          [t('board.origin'), x.isSample ? t('board.originSample') : t('board.originLocal')],
+        ] : null;
       }}
     />
   );
 }
 
 export function AdminMaintenancePage() {
+  const { t, te, formatDate } = useI18n();
   const q = useQuery(() => services.maintenance.list(), []);
   const list: MaintenanceRequest[] | undefined = q.data;
-  const rows: Row[] | undefined = list?.map((x) => ({ id: x.id, reference: x.reference, createdAt: x.createdAt, status: x.status, organisation: x.organisation, fullName: x.fullName, email: x.email, isSample: x.isSample, subject: x.serviceType, extra: `${x.urgency} · ${x.equipmentDescription}` }));
+  const rows: Row[] | undefined = list?.map((x) => ({ id: x.id, reference: x.reference, createdAt: x.createdAt, status: x.status, organisation: x.organisation, fullName: x.fullName, isSample: x.isSample, subject: te('service', x.serviceType), extra: `${te('status', x.urgency)} · ${x.equipmentDescription}` }));
   return (
     <RequestBoard
-      title="Maintenance requests" kind="maintenance" statuses={MAINTENANCE_STATUSES}
+      title={t('board.maintenanceTitle')} kind="maintenance" statuses={MAINTENANCE_STATUSES}
       rows={rows} loading={q.status === 'loading'} error={q.error} retry={q.retry}
       onStatus={async (id, s) => { await services.maintenance.updateStatus(id, s as MaintenanceStatus); invalidateData(); }}
       detail={(id) => {
         const x = list?.find((r) => r.id === id);
-        return x ? [['Reference', x.reference], ['Received', formatDate(x.createdAt)], ['Status', x.status], ['Name', x.fullName], ['Organisation', x.organisation], ['Email', x.email], ['Phone', x.phone ?? '—'], ['Equipment', x.equipmentDescription], ['Service type', x.serviceType], ['Urgency', x.urgency], ['Problem', x.details], ['Origin', x.isSample ? 'Pre-loaded sample' : 'Submitted in this browser (simulated)']] : null;
+        return x ? [
+          [t('col.reference'), x.reference], [t('board.received'), formatDate(x.createdAt)], [t('col.status'), te('status', x.status)],
+          [t('field.fullName'), x.fullName], [t('field.organisation'), x.organisation], [t('field.email'), x.email], [t('field.phone'), x.phone ?? '—'],
+          [t('col.equipment'), x.equipmentDescription], [t('field.serviceType'), te('service', x.serviceType)], [t('field.urgency'), te('status', x.urgency)],
+          [t('field.problem'), x.details], [t('board.origin'), x.isSample ? t('board.originSample') : t('board.originLocal')],
+        ] : null;
       }}
     />
   );
 }
-

@@ -1,8 +1,9 @@
-.state { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 64px 20px; border: 1px solid var(--rule); color: var(--ink-2); }
-.state svg { width: 28px; height: 28px; color: var(--muted); }
+.state { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 56px 20px; border: 1px dashed var(--control-border); border-radius: var(--r-lg); background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink-2); animation: rise var(--dur-3) var(--ease) backwards; }
+.state svg { width: 30px; height: 30px; color: var(--coral-ink); }
+.state h3 { font-size: var(--step-1); color: var(--ink); }
 .text { max-width: 48ch; }
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.notice { border: 1px solid var(--rule); border-left: 3px solid var(--accent); padding: 14px 16px; background: var(--paper-2); display: flex; flex-direction: column; gap: 4px; font-size: var(--step--1); color: var(--ink-2); }
-.notice p { font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5; }
-.noticeDemo { border-left-color: var(--ink); }
+.notice { border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--edge), var(--shadow-sm); padding: 14px 18px; padding-inline-start: 20px; background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 4px; color: var(--ink-2); }
+.notice p { font-size: 0.9rem; line-height: 1.55; }
+.notice strong { color: var(--ink); }

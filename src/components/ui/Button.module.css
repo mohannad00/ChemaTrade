@@ -1,19 +1,31 @@
 .button {
+  position: relative; isolation: isolate; overflow: hidden; white-space: nowrap;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   min-height: 46px; padding: 0 22px;
-  font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
-  border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer;
-  transition: background-color 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease);
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  border: 1px solid var(--control-border); border-radius: var(--r-md); background: var(--field); color: var(--ink); cursor: pointer;
+  transition: transform var(--dur-2) var(--ease-spring), background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
-.button svg { width: 16px; height: 16px; flex: none; transition: transform 0.2s var(--ease); }
-.button:hover svg { transform: translateX(3px); }
-.button:disabled, .button[aria-disabled='true'] { opacity: 0.5; cursor: not-allowed; }
-.button:disabled:hover svg { transform: none; }
-.sm { min-height: 34px; padding: 0 12px; }
-.primary { background: var(--ink); color: var(--paper); }
-.primary:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--paper); }
-.secondary:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
-.ghost { border-color: transparent; padding-inline: 8px; }
-.ghost:hover:not(:disabled) { border-color: var(--rule); color: var(--accent); }
+/* Sheen that sweeps across on hover. */
+.button::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%); transform: translateX(-120%); transition: transform 0.7s var(--ease); }
+[dir='rtl'] .button::before { transform: translateX(120%); }
+.button:hover:not(:disabled)::before { transform: translateX(120%); }
+[dir='rtl'] .button:hover:not(:disabled)::before { transform: translateX(-120%); }
+.button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.button:active:not(:disabled) { transform: translateY(0) scale(0.97); box-shadow: var(--shadow-sm); transition-duration: var(--dur-1); }
+.button svg { width: 16px; height: 16px; flex: none; transition: translate var(--dur-2) var(--ease); }
+.button:hover svg { translate: 3px 0; }
+[dir='rtl'] .button:hover svg { translate: -3px 0; }
+.button:disabled, .button[aria-disabled='true'] { opacity: 0.55; cursor: not-allowed; }
+.button:disabled:hover svg { translate: none; }
+.sm { min-height: 38px; padding: 0 16px; font-size: 0.72rem; border-radius: var(--r-sm); }
+.primary { background: var(--solid-coral); border-color: var(--solid-coral); color: #fff; box-shadow: 0 8px 20px -8px var(--solid-coral); }
+.primary:hover:not(:disabled) { background: var(--solid-coral-strong); border-color: var(--solid-coral-strong); color: #fff; box-shadow: 0 12px 26px -8px var(--solid-coral); }
+.secondary { border-color: var(--line); background: var(--card); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.secondary:hover:not(:disabled) { border-color: var(--coral); color: var(--ink); background: var(--card-solid); }
+.ghost { border-color: transparent; background: transparent; padding-inline: 12px; }
+.ghost:hover:not(:disabled) { border-color: var(--line); background: var(--coral-wash); color: var(--ink); box-shadow: none; }
 .danger { border-color: var(--danger); color: var(--danger); }
-.danger:hover:not(:disabled) { background: var(--danger); color: var(--paper); }
+.danger:hover:not(:disabled) { background: var(--solid-danger); border-color: var(--solid-danger); color: #fff; }
+@media (prefers-reduced-motion: reduce) { .button:hover:not(:disabled), .button:active:not(:disabled) { transform: none; } .button::before { display: none; } }

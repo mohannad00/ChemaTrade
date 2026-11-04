@@ -1,0 +1,7 @@
+.rings { position: absolute; inset: 0; width: 100%; height: 100%; direction: ltr; }
+.rings circle { fill: none; stroke: var(--ring); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.rings .node { fill: var(--coral); stroke: none; }
+.slow, .fast { transform-origin: 300px 300px; transform-box: view-box; }
+.slow { animation: spin 140s linear infinite; }
+.fast { animation: spin 90s linear infinite reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }

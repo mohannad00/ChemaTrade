@@ -1,4 +1,5 @@
 export interface MonthlyActivity {
+  /** Calendar month as YYYY-MM. */
   month: string;
   quotations: number;
   maintenance: number;

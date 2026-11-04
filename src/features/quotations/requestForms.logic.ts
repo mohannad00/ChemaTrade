@@ -1,4 +1,4 @@
-import { isEmail, minLength, required, type FieldErrors } from '@/lib/validation';
+import { emailError, minLength, required, type FieldErrors } from '@/lib/validation';
 import type { QuotationInput } from './quotations.types';
 import type { MaintenanceInput } from '@/features/maintenance/maintenance.types';
 
@@ -17,11 +17,15 @@ export type QuotationField = keyof QuotationFormValues;
 export function validateQuotation(v: QuotationFormValues): FieldErrors<QuotationField> {
   const qty = Number(v.quantity);
   return {
-    fullName: required(v.fullName, 'Full name'),
-    organisation: required(v.organisation, 'Organisation'),
-    email: required(v.email, 'Email') ?? (isEmail(v.email) ? undefined : 'Enter a valid email address.'),
-    quantity: !v.quantity.trim() ? 'Quantity is required.' : !Number.isInteger(qty) || qty < 1 || qty > 9999 ? 'Enter a whole number between 1 and 9999.' : undefined,
-    details: required(v.details, 'Requirements') ?? minLength(v.details, 10, 'Requirements'),
+    fullName: required(v.fullName, 'field.fullName'),
+    organisation: required(v.organisation, 'field.organisation'),
+    email: emailError(v.email),
+    quantity: !v.quantity.trim()
+      ? { key: 'validation.required', labelKey: 'field.quantity' }
+      : !Number.isInteger(qty) || qty < 1 || qty > 9999
+        ? { key: 'validation.quantity' }
+        : undefined,
+    details: required(v.details, 'field.requirements') ?? minLength(v.details, 10, 'field.requirements'),
   };
 }
 
@@ -53,13 +57,13 @@ export type MaintenanceField = keyof MaintenanceFormValues;
 
 export function validateMaintenance(v: MaintenanceFormValues): FieldErrors<MaintenanceField> {
   return {
-    fullName: required(v.fullName, 'Full name'),
-    organisation: required(v.organisation, 'Organisation'),
-    email: required(v.email, 'Email') ?? (isEmail(v.email) ? undefined : 'Enter a valid email address.'),
-    equipmentDescription: required(v.equipmentDescription, 'Equipment'),
-    serviceType: required(v.serviceType, 'Service type'),
-    urgency: required(v.urgency, 'Urgency'),
-    details: required(v.details, 'Problem description') ?? minLength(v.details, 10, 'Problem description'),
+    fullName: required(v.fullName, 'field.fullName'),
+    organisation: required(v.organisation, 'field.organisation'),
+    email: emailError(v.email),
+    equipmentDescription: required(v.equipmentDescription, 'field.equipment'),
+    serviceType: required(v.serviceType, 'field.serviceType'),
+    urgency: required(v.urgency, 'field.urgency'),
+    details: required(v.details, 'field.problem') ?? minLength(v.details, 10, 'field.problem'),
   };
 }
 

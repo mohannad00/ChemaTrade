@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useI18n } from '@/i18n/I18nProvider';
 
 export function useDebouncedValue<T>(value: T, ms = 250): T {
   const [v, setV] = useState(value);
@@ -10,9 +11,11 @@ export function useDebouncedValue<T>(value: T, ms = 250): T {
 }
 
 export function useDocumentTitle(title: string): void {
+  const { t } = useI18n();
+  const suffix = t('app.titleSuffix');
   useEffect(() => {
-    document.title = `${title} — Chema Trade (Demo)`;
-  }, [title]);
+    document.title = `${title} — ${suffix}`;
+  }, [title, suffix]);
 }
 
 export function useReducedMotion(): boolean {

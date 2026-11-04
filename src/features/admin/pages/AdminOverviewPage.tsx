@@ -1,72 +1,74 @@
 import { Link } from 'react-router-dom';
-import { DEMO_DISCLAIMER } from '@/config/app.config';
 import { Badge } from '@/components/ui/Badge';
 import { ErrorState, LoadingState, Notice } from '@/components/ui/States';
 import { useDocumentTitle } from '@/hooks/common';
 import { useQuery } from '@/hooks/useQuery';
-import { formatDate } from '@/lib/format';
+import { useI18n } from '@/i18n/I18nProvider';
+import type { MessageKey } from '@/i18n/messages.en';
 import { services } from '@/services';
 import styles from '../components/Admin.module.css';
 
 export function AdminOverviewPage() {
-  useDocumentTitle('Demo dashboard');
+  const { t, te, formatDate, formatMonth } = useI18n();
+  useDocumentTitle(t('ov.title'));
   const q = useQuery(() => services.dashboard.getStats(), []);
-  if (q.status === 'loading') return <LoadingState label="Loading statistics…" />;
+  if (q.status === 'loading') return <LoadingState label={t('ov.loading')} />;
   if (q.status === 'error') return <ErrorState message={q.error.message} onRetry={q.retry} />;
   const s = q.data;
   const max = Math.max(1, ...s.activity.flatMap((a) => [a.quotations, a.maintenance]));
-  const cards: [string, number, string][] = [
-    ['Equipment items', s.equipmentTotal, '/admin/equipment'],
-    ['Open quotations', s.quotationsOpen, '/admin/quotations'],
-    ['Open maintenance', s.maintenanceOpen, '/admin/maintenance'],
-    ['Published articles', s.articlesPublished, '/admin/content'],
-    ['Draft articles', s.articlesDraft, '/admin/content'],
-    ['Submitted this session', s.submittedThisSession, '/admin/quotations'],
+  const cards: [MessageKey, number, string][] = [
+    ['ov.equipment', s.equipmentTotal, '/admin/equipment'],
+    ['ov.openQuotations', s.quotationsOpen, '/admin/quotations'],
+    ['ov.openMaintenance', s.maintenanceOpen, '/admin/maintenance'],
+    ['ov.published', s.articlesPublished, '/admin/content'],
+    ['ov.drafts', s.articlesDraft, '/admin/content'],
+    ['ov.submitted', s.submittedThisSession, '/admin/quotations'],
   ];
+  const chartLabel = `${t('ov.chartAria')} ${s.activity.map((a) => t('ov.chartRow', { month: formatMonth(a.month), q: a.quotations, m: a.maintenance })).join('; ')}.`;
   return (
     <>
-      <div className={styles.head}><h1>Dashboard overview</h1><Badge tone="demo">Sample statistics</Badge></div>
-      <Notice tone="demo" title="Demo statistics">All figures are computed from sample data held in this browser. They are not real business statistics. {DEMO_DISCLAIMER}</Notice>
-      <div className={styles.statGrid}>
+      <div className={styles.head}><h1>{t('ov.title')}</h1><Badge tone="demo">{t('ov.badge')}</Badge></div>
+      <Notice tone="demo" title={t('ov.noticeTitle')}>{t('ov.notice')} {t('demo.disclaimer')}</Notice>
+      <div className={`${styles.statGrid} stagger`}>
         {cards.map(([label, n, to]) => (
-          <Link key={label} to={to} className={styles.stat} style={{ color: 'inherit', textDecoration: 'none' }}>
-            <span className="eyebrow">{label}</span><strong>{n}</strong>
+          <Link key={label} to={to} className={styles.stat} data-glow>
+            <span className="eyebrow">{t(label)}</span><strong>{n}</strong>
           </Link>
         ))}
       </div>
       <div className={styles.two}>
         <section className={styles.panel} aria-labelledby="act-h">
-          <h2 id="act-h">Monthly activity (illustrative sample)</h2>
-          <div className={styles.chart} role="img" aria-label={`Bar chart of sample monthly quotations and maintenance requests. ${s.activity.map((a) => `${a.month}: ${a.quotations} quotations, ${a.maintenance} maintenance`).join('; ')}.`}>
+          <h2 id="act-h">{t('ov.activity')}</h2>
+          <div className={styles.chart} role="img" aria-label={chartLabel}>
             {s.activity.map((a) => (
               <div key={a.month} className={styles.barGroup}>
                 <div className={styles.bars}>
-                  <div className={styles.bar} style={{ height: `${(a.quotations / max) * 100}%` }} title={`${a.quotations} quotations`} />
-                  <div className={`${styles.bar} ${styles.alt}`} style={{ height: `${(a.maintenance / max) * 100}%` }} title={`${a.maintenance} maintenance`} />
+                  <div className={styles.bar} style={{ height: `${(a.quotations / max) * 100}%` }} title={`${t('ov.quotations')}: ${a.quotations}`} />
+                  <div className={`${styles.bar} ${styles.alt}`} style={{ height: `${(a.maintenance / max) * 100}%` }} title={`${t('ov.maintenance')}: ${a.maintenance}`} />
                 </div>
               </div>
             ))}
           </div>
-          <div className={styles.months} aria-hidden="true">{s.activity.map((a) => <span key={a.month}>{a.month}</span>)}</div>
-          <p className={styles.legend}><span><i />Quotations</span><span><i className={styles.alt} />Maintenance</span></p>
+          <div className={styles.months} aria-hidden="true">{s.activity.map((a) => <span key={a.month}>{formatMonth(a.month)}</span>)}</div>
+          <p className={styles.legend}><span><i />{t('ov.quotations')}</span><span><i className={styles.alt} />{t('ov.maintenance')}</span></p>
         </section>
         <section className={styles.panel} aria-labelledby="st-h">
-          <h2 id="st-h">Equipment by status</h2>
+          <h2 id="st-h">{t('ov.byStatus')}</h2>
           <ul className={styles.statusList}>
-            {Object.entries(s.equipmentByStatus).map(([k, v]) => <li key={k}><span>{k}</span><strong>{v}</strong></li>)}
+            {Object.entries(s.equipmentByStatus).map(([k, v]) => <li key={k}><span>{te('status', k)}</span><strong>{v}</strong></li>)}
           </ul>
         </section>
       </div>
       <section className={styles.panel} aria-labelledby="rc-h">
-        <h2 id="rc-h">Recent requests</h2>
+        <h2 id="rc-h">{t('ov.recent')}</h2>
         <div className={styles.tableWrap}>
           <table className={styles.table}>
-            <thead><tr><th>Type</th><th>Reference</th><th>Organisation</th><th>Date</th><th>Status</th></tr></thead>
+            <thead><tr><th>{t('col.type')}</th><th>{t('col.reference')}</th><th>{t('col.organisation')}</th><th>{t('col.date')}</th><th>{t('col.status')}</th></tr></thead>
             <tbody>
               {s.recent.map((r) => (
                 <tr key={r.id}>
-                  <td>{r.kind}</td>
-                  <td><Link to={r.kind === 'Quotation' ? '/admin/quotations' : '/admin/maintenance'} className="mono">{r.reference}</Link></td>
+                  <td>{te('kind', r.kind)}</td>
+                  <td><Link to={r.kind === 'Quotation' ? '/admin/quotations' : '/admin/maintenance'} className={`mono ${styles.ltr}`}>{r.reference}</Link></td>
                   <td>{r.who}</td><td>{formatDate(r.createdAt)}</td><td><Badge>{r.status}</Badge></td>
                 </tr>
               ))}

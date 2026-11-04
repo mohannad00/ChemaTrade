@@ -1,13 +1,13 @@
-.footer { margin-top: clamp(64px, 10vw, 140px); background: var(--paper-2); border-top: 1px solid var(--rule); padding-top: clamp(40px, 6vw, 72px); position: relative; z-index: 10; }
+.footer { margin-top: clamp(64px, 10vw, 140px); background: var(--paper-2); border-top: 1px solid var(--line); color: var(--ink); padding-top: clamp(40px, 6vw, 72px); position: relative; z-index: 10; }
 .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; }
-.brand { font-size: var(--step-2); line-height: 1; margin-bottom: 16px; }
-.brand em { color: var(--accent); }
-.note { font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-2); max-width: 44ch; }
-.footer h2 { margin-bottom: 14px; font-weight: 400; }
+.brand { font-size: var(--step-2); font-weight: 700; line-height: 1; margin-bottom: 16px; }
+.brand em { color: var(--coral-ink); font-style: normal; }
+.note { font-size: 0.85rem; color: var(--ink-2); max-width: 44ch; }
+.footer h2 { margin-bottom: 14px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; box-shadow: var(--edge); padding-inline-start: 0.8rem; border-radius: 2px; }
 .footer li + li { margin-top: 8px; }
-.footer li a { color: var(--ink); text-decoration: none; background-image: linear-gradient(currentColor, currentColor); background-size: 0 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size 0.25s; }
-.footer li a:hover { background-size: 100% 1px; color: var(--accent); }
-.base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--rule); padding-block: 18px; font-size: 0.8rem; color: var(--muted); }
+.footer li a { display: inline-block; color: var(--ink); text-decoration: none; border-radius: var(--r-xs); transition: color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease); }
+.footer li a:hover { color: var(--coral-ink); transform: translateX(4px); text-decoration: underline; text-underline-offset: 4px; }
+[dir='rtl'] .footer li a:hover { transform: translateX(-4px); }
+.base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-block: 18px; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
 @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
-

@@ -1,0 +1,23 @@
+.logo { display: block; flex: none; overflow: visible; }
+.tile { transition: filter var(--dur-2) var(--ease); }
+
+.waveBack, .waveFront { transform-box: fill-box; }
+.animated .waveBack { animation: drift 5s linear infinite; }
+.animated .waveFront { animation: drift 3.2s linear infinite reverse; }
+.animated .liquid { animation: bob 3.6s ease-in-out infinite alternate; }
+.animated .bubble { opacity: 0; animation: bubble 2.8s ease-in infinite; }
+.animated .b2 { animation-duration: 3.4s; animation-delay: 1.2s; }
+.animated .arrow { animation: nudge 2.6s var(--ease) infinite; }
+
+/* Waves are 12 units wide, so a 12 unit shift loops seamlessly. */
+@keyframes drift { to { transform: translateX(12px); } }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-1.6px); } }
+@keyframes bubble { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-9px); opacity: 0; } }
+@keyframes nudge { 0%, 70%, 100% { transform: translate(0, 0); } 82% { transform: translate(1.2px, -1.2px); } }
+
+/* Hovering the whole link (see Wordmark) speeds things up. */
+:global(a:hover) .animated .waveFront { animation-duration: 1.4s; }
+:global(a:hover) .animated .arrow { animation-duration: 1s; }
+:global(a:hover) .tile { filter: brightness(1.08) saturate(1.1); }
+
+@media (prefers-reduced-motion: reduce) { .animated * { animation: none !important; } .animated .bubble { opacity: 0; } }

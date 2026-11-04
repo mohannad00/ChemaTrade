@@ -8,6 +8,7 @@ export interface Category {
   name: string;
   description: string;
   sortOrder: number;
+  i18n?: { ar?: Partial<Pick<Category, 'name' | 'description'>> };
 }
 
 export interface EquipmentSpec {
@@ -27,12 +28,15 @@ export interface Equipment {
   /** Optional, illustrative only. Never a real quotation. */
   illustrativePrice?: string;
   featured: boolean;
+  /** Path or http(s) URL of a product image. Seed images are generic sample illustrations, not real product photos. */
+  image?: string;
   /** Every item in this phase is sample content. */
   isDemo: true;
   updatedAt: string;
+  i18n?: { ar?: Partial<Pick<Equipment, 'name' | 'summary' | 'description' | 'specs' | 'illustrativePrice'>> };
 }
 
-export type EquipmentInput = Omit<Equipment, 'id' | 'slug' | 'isDemo' | 'updatedAt'> & { slug?: string };
+export type EquipmentInput = Omit<Equipment, 'id' | 'slug' | 'isDemo' | 'updatedAt' | 'i18n'> & { slug?: string };
 
 export interface EquipmentFilter {
   categorySlug?: string;

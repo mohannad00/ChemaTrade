@@ -1,16 +1,19 @@
 import { useId } from 'react';
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { cx } from '@/lib/cx';
+import { useI18n } from '@/i18n/I18nProvider';
+import type { FieldError } from '@/lib/validation';
 import styles from './Field.module.css';
 
 interface BaseProps {
   label: string;
-  error?: string;
+  error?: FieldError;
   hint?: string;
   required?: boolean;
 }
 
 function Wrapper({ id, label, error, hint, required, children }: BaseProps & { id: string; children: ReactNode }) {
+  const { tErr } = useI18n();
   return (
     <div className={cx(styles.field, error && styles.invalid)}>
       <label htmlFor={id} className={styles.label}>
@@ -19,12 +22,12 @@ function Wrapper({ id, label, error, hint, required, children }: BaseProps & { i
       </label>
       {children}
       {hint && !error && <p id={`${id}-hint`} className={styles.hint}>{hint}</p>}
-      {error && <p id={`${id}-err`} className={styles.error} role="alert">{error}</p>}
+      {error && <p id={`${id}-err`} className={styles.error} role="alert">{tErr(error)}</p>}
     </div>
   );
 }
 
-function describedBy(id: string, error?: string, hint?: string): string | undefined {
+function describedBy(id: string, error?: FieldError, hint?: string): string | undefined {
   if (error) return `${id}-err`;
   return hint ? `${id}-hint` : undefined;
 }

@@ -10,7 +10,8 @@ describe('quotation validation', () => {
   it('flags required and malformed fields', () => {
     const e = validateQuotation({ ...goodQuote, fullName: ' ', email: 'nope', quantity: '0', details: 'short' });
     expect(e.fullName).toBeTruthy();
-    expect(e.email).toMatch(/valid email/);
+    expect(e.email?.key).toBe('validation.email');
+    expect(e.fullName?.key).toBe('validation.required');
     expect(e.quantity).toBeTruthy();
     expect(e.details).toBeTruthy();
   });

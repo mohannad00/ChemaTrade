@@ -45,6 +45,7 @@ export interface MaintenanceServiceInfo {
   title: string;
   summary: string;
   points: string[];
+  i18n?: { ar?: Partial<Pick<MaintenanceServiceInfo, 'title' | 'summary' | 'points'>> };
 }
 
 export interface SparePartGroup {
@@ -53,4 +54,5 @@ export interface SparePartGroup {
   description: string;
   examples: string[];
   status: 'Request a Quote' | 'Sourcing on Request';
+  i18n?: { ar?: Partial<Pick<SparePartGroup, 'name' | 'description' | 'examples'>> };
 }

@@ -17,7 +17,7 @@ import { NotFoundPage } from '@/features/company/pages/NotFoundPage';
 export const routes: RouteObject[] = [
   {
     element: <SiteLayout />,
-    hydrateFallbackElement: <p className="visually-hidden" role="status">Loading…</p>,
+    hydrateFallbackElement: <p className="visually-hidden" role="status" aria-label="Loading" />,
     children: [
       { index: true, element: <HomePage /> },
       { path: 'equipment', element: <EquipmentCatalogPage /> },

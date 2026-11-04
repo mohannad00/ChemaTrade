@@ -1,8 +1,13 @@
-.mark { position: relative; display: inline-flex; flex-direction: column; text-decoration: none; color: var(--ink); line-height: 1; padding-block: 4px; }
+.mark { position: relative; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); line-height: 1; border-radius: var(--r-md); }
 .mark:hover { color: var(--ink); }
-.letters { display: inline-flex; font-family: var(--font-display); font-size: 1.7rem; letter-spacing: -0.02em; font-weight: 500; }
-.clip { display: inline-block; overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
-.sub { font-style: italic; color: var(--accent); font-weight: 400; }
-.space { display: inline-block; width: 0.3em; }
-.rule { display: block; height: 1px; background: var(--ink); margin-top: 3px; transform-origin: left; transition: background-color 0.2s; }
-.mark:hover .rule { background: var(--accent); }
+.logoWrap { display: grid; place-items: center; flex: none; transition: transform var(--dur-3) var(--ease-spring); filter: drop-shadow(0 6px 10px rgba(232, 66, 31, 0.3)); }
+.mark:hover .logoWrap { transform: rotate(-6deg) scale(1.06); }
+.mark:active .logoWrap { transform: scale(0.94); }
+.text { position: relative; display: inline-flex; flex-direction: column; padding-block: 4px; }
+.letters { display: inline-flex; font-family: var(--font-display); font-size: 1.55rem; letter-spacing: -0.02em; font-weight: 700; }
+.clip { display: inline-block; overflow: hidden; padding-bottom: 0.18em; margin-bottom: -0.18em; }
+.sub { color: var(--coral-ink); font-weight: 600; }
+.space { display: inline-block; width: 0.28em; }
+.rule { display: block; height: 2px; width: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--ink), var(--coral)); margin-top: 4px; transform-origin: left; }
+[dir='rtl'] .rule { transform-origin: right; background: linear-gradient(270deg, var(--ink), var(--coral)); }
+@media (prefers-reduced-motion: reduce) { .mark:hover .logoWrap { transform: none; } }

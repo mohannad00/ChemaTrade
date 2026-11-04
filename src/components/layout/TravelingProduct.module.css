@@ -1,3 +1,0 @@
-.travel { position: fixed; left: 0; top: calc(50% + 30px); margin-top: -246px; z-index: 5; pointer-events: none; will-change: transform; }
-.travel img { width: 100%; height: auto; user-select: none; }
-.caption { display: block; margin-top: 6px; text-align: center; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }

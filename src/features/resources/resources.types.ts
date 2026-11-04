@@ -13,9 +13,10 @@ export interface Article {
   publishedAt: string;
   updatedAt: string;
   isDemo: true;
+  i18n?: { ar?: Partial<Pick<Article, 'title' | 'excerpt' | 'body' | 'tag' | 'author'>> };
 }
 
-export type ArticleInput = Omit<Article, 'id' | 'slug' | 'isDemo' | 'updatedAt' | 'publishedAt' | 'author'> & { slug?: string };
+export type ArticleInput = Omit<Article, 'id' | 'slug' | 'isDemo' | 'updatedAt' | 'publishedAt' | 'author' | 'i18n'> & { slug?: string };
 
 export interface ArticleFilter {
   status?: ArticleStatus;

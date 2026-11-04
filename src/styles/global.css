@@ -1,66 +1,111 @@
-@import '@fontsource/newsreader/400.css';
-@import '@fontsource/newsreader/500.css';
-@import '@fontsource/newsreader/400-italic.css';
-@import '@fontsource/courier-prime/400.css';
-@import '@fontsource/courier-prime/700.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/ibm-plex-sans-arabic/400.css';
+@import '@fontsource/ibm-plex-sans-arabic/500.css';
+@import '@fontsource/ibm-plex-sans-arabic/600.css';
+@import '@fontsource/ibm-plex-sans-arabic/700.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
 @import './tokens.css';
 
-*, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+*, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: radial-gradient(90% 80% at 50% 42%, var(--paper-hi) 0%, var(--paper) 55%, var(--paper-2) 100%) fixed, var(--paper);
   color: var(--ink);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--step-0);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; line-height: 1.08; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
-h1 { font-size: var(--step-4); }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h1 { font-size: var(--step-4); font-weight: 700; letter-spacing: -0.03em; }
 h2 { font-size: var(--step-3); }
 h3 { font-size: var(--step-2); }
 h4 { font-size: var(--step-1); }
 p { margin: 0; text-wrap: pretty; }
 a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-a:hover { color: var(--ink); }
+a:hover { color: var(--accent-strong); }
 img, svg { display: block; max-width: 100%; }
 button, input, select, textarea { font: inherit; color: inherit; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 table { border-collapse: collapse; width: 100%; }
 
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-::selection { background: var(--ink); color: var(--paper); }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: var(--r-xs); }
+:where(button, a, input, select, textarea, summary):focus-visible { transition: outline-offset var(--dur-1) var(--ease); }
+::selection { background: var(--coral); color: #fff; }
 
-.mono { font-family: var(--font-mono); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: var(--step--1);
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-2);
 }
-.container { width: 100%; max-width: var(--max-w); margin-inline: auto; padding-inline: var(--gutter); }
+/* Card/section title: coral bar, as on the instrument panels. */
+.eyebrow.bar { border-inline-start: 0.26rem solid var(--coral); padding-inline-start: 0.6rem; color: var(--ink); font-weight: 600; }.container { width: 100%; max-width: var(--max-w); margin-inline: auto; padding-inline: var(--gutter); }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .skip-link {
-  position: fixed; left: 12px; top: -80px; z-index: 1000; background: var(--ink); color: var(--paper);
-  padding: 10px 14px; font-family: var(--font-mono); text-decoration: none;
+  position: fixed; inset-inline-start: 12px; top: -80px; z-index: 1000; background: var(--inverse-bg); color: #fff;
+  padding: 10px 16px; font-family: var(--font-mono); font-weight: 600; text-decoration: none;
 }
-.skip-link:focus { top: 12px; color: var(--paper); }
-.lede { font-size: var(--step-1); color: var(--ink-2); max-width: 46ch; line-height: 1.45; }
-.prose { max-width: 66ch; }
+.skip-link:focus { top: 12px; color: #fff; }
+.lede { font-size: var(--step-1); color: var(--ink-2); max-width: 50ch; line-height: 1.5; }
+.lede, p { overflow-wrap: break-word; }
+.prose { max-width: 68ch; }
 .prose p + p, .prose h2 + p, .prose p + h2 { margin-top: 1em; }
 .prose h2 { font-size: var(--step-2); margin-top: 1.6em; }
 
+/* Arabic joins letters: tracking and uppercase must never apply. */
+:lang(ar), :lang(ar) * { letter-spacing: 0 !important; text-transform: none !important; }
+:lang(ar) body { line-height: 1.75; }
+:lang(ar) h1, :lang(ar) h2, :lang(ar) h3, :lang(ar) h4 { line-height: 1.35; font-weight: 700; }
+:lang(ar) .eyebrow { font-weight: 600; }
+
+/* Directional icons mirror in RTL. */
+[dir='rtl'] .lucide-arrow-right,
+[dir='rtl'] .lucide-arrow-up-right,
+[dir='rtl'] .lucide-chevron-right,
+[dir='rtl'] .lucide-log-out { transform: scaleX(-1); }
+
+/* The spotlight sits under the content, so main must stack above it. */
+#main { position: relative; z-index: 1; outline: none; }
+
+.page-enter { animation: pageIn var(--dur-3) var(--ease) backwards; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(14px); } }
+
+/* Children rise in one after another. ackwards keeps no transform afterwards. */
+.stagger > * { animation: rise var(--dur-3) var(--ease) backwards; }
+.stagger > :nth-child(1) { animation-delay: 0ms; }
+.stagger > :nth-child(2) { animation-delay: 60ms; }
+.stagger > :nth-child(3) { animation-delay: 120ms; }
+.stagger > :nth-child(4) { animation-delay: 180ms; }
+.stagger > :nth-child(5) { animation-delay: 240ms; }
+.stagger > :nth-child(6) { animation-delay: 300ms; }
+.stagger > :nth-child(n + 7) { animation-delay: 360ms; }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+/* Smooth colour change while the theme is being switched. */
+html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease), fill 0.4s var(--ease), stroke 0.4s var(--ease), box-shadow 0.4s var(--ease) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .page-enter, .stagger > * { animation: none; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

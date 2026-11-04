@@ -6,7 +6,15 @@
     <meta name="description" content="Chema Trade — scientific and laboratory equipment, maintenance and spare parts. Frontend demo with sample content." />
     <meta name="theme-color" content="#EFE9DD" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Chema Trade — Demo</title>
+    <script>
+      (function () {
+        try {
+          var c = localStorage.getItem('chematrade.theme.v1');
+          var dark = c === 'dark' || ((c !== 'light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) { document.documentElement.dataset.theme = 'light'; }
+      })();
+    </script>    <title>Chema Trade — Demo</title>
   </head>
   <body>
     <div id="root"></div>
