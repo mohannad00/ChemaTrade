@@ -5,7 +5,7 @@ import { useReducedMotion } from '@/hooks/common';
 import { useI18n } from '@/i18n/I18nProvider';
 import styles from './Wordmark.module.css';
 
-const WORDS: Record<'en' | 'ar', [string, string]> = { en: ['Chema', 'Trade'], ar: ['كيما', 'ترايد'] };
+const WORDS: Record<'en' | 'ar', [string, string]> = { en: ['Chema', 'Trade'], ar: ['كيما', 'تريد'] };
 
 /** Logo mark + animated wordmark. Latin letters rise in sequence; Arabic words rise as units so letters stay joined. */
 export function Wordmark({ onNavigate }: { onNavigate?: () => void }) {

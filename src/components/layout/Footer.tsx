@@ -8,7 +8,7 @@ export function Footer() {
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
         <div>
-          <p className={styles.brand}>{lang === 'ar' ? <>كيما <em>ترايد</em></> : <>Chema <em>Trade</em></>}</p>
+          <p className={styles.brand}>{lang === 'ar' ? <>كيما <em>تريد</em></> : <>Chema <em>Trade</em></>}</p>
           <p className={styles.note}>{t('demo.disclaimer')}</p>
         </div>
         <nav aria-label={t('footer.exploreNav')}>

@@ -146,11 +146,8 @@ export function GlasswareFigure() {
           <line className={styles.scanFast} x1="0" x2="0" y1="18" y2="172" />
         </g>
 
-        <motion.text x="260" y="14" textAnchor="middle" className={styles.label} initial={reduced ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.6, duration: 0.6 }}>
-          {t('fig.label')}
-        </motion.text>
+
       </svg>
-      <figcaption>{t('fig.caption')}</figcaption>
     </figure>
   );
 }

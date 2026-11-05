@@ -107,8 +107,6 @@ export const en = {
   'home.rq.lede': 'Request a quotation or maintenance. In this demo, forms are simulated and appear in the demo dashboard only.',
 
   'fig.aria': 'Line drawing of laboratory glassware: a beaker, a conical flask, three test tubes and a round-bottom flask',
-  'fig.label': 'schematic · not to scale',
-  'fig.caption': 'Fig. 01 — Glassware, schematic line drawing',
 
   'catalog.eyebrow': 'Equipment catalog',
   'catalog.title': 'Laboratory equipment',
