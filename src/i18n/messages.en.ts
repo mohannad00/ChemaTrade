@@ -77,6 +77,7 @@ export const en = {
   'common.clearFilters': 'Clear filters',
   'common.equipment': 'Equipment',
 
+  'home.bg.hero': 'Chema Trade',
   'home.heroEyebrow': 'Laboratory equipment · maintenance · spare parts',
   'home.heroPre': 'Scientific equipment,',
   'home.heroEm': 'sourced',

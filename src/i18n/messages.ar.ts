@@ -80,6 +80,7 @@ export const ar: Record<MessageKey, string> = {
   'common.clearFilters': 'مسح عوامل التصفية',
   'common.equipment': 'المعدات',
 
+  'home.bg.hero': 'كيما ترايد',
   'home.heroEyebrow': 'معدات مخبرية · صيانة · قطع غيار',
   'home.heroPre': 'معدات علمية،',
   'home.heroEm': 'نوفّرها',

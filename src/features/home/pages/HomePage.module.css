@@ -1,12 +1,15 @@
-.hero { position: relative; padding: calc(var(--header-h) + clamp(32px, 6vw, 72px)) 0 clamp(56px, 8vw, 96px); border-bottom: 1px solid var(--line); overflow: hidden; }
+.hero { position: relative; overflow: clip; padding: calc(var(--header-h) + clamp(32px, 6vw, 72px)) 0 clamp(56px, 8vw, 96px); border-bottom: 1px solid var(--line); overflow: hidden; }
 .heroGrid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 5vw, 72px); align-items: center; position: relative; }
 .heroText { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
 .heroText h1 { max-width: 15ch; }
 .heroText h1 em { font-style: normal; color: var(--coral-ink); font-weight: 600; }
 .plus { display: grid; grid-template-columns: repeat(14, 1fr); row-gap: 0.8rem; width: min(100%, 360px); color: var(--coral); font-family: var(--font-mono); font-size: 0.9rem; line-height: 1; opacity: 0.55; user-select: none; }
-.stage { position: relative; justify-self: end; width: 100%; max-width: 560px; aspect-ratio: 1; display: grid; place-items: center; }
+.stage { position: relative; width: 100%; max-width: 560px; aspect-ratio: 1; display: grid; place-items: center; }
 .stage > figure { position: relative; z-index: 1; }
-.section { padding-block: clamp(56px, 8vw, 104px); }
+.section { position: relative; overflow: clip; padding-block: clamp(56px, 8vw, 104px); }
+.section > :global(.container) { position: relative; z-index: 1; }
+.section > :global(.container) li { height: 100%; }
+.stageWrap { justify-self: end; width: 100%; max-width: 560px; }
 .section > :global(.container) { display: flex; flex-direction: column; gap: 28px; }
 .alt { background: var(--tint); border-block: 1px solid var(--line); }
 .section h2 { max-width: 20ch; margin: 10px 0 14px; }
@@ -32,7 +35,7 @@
 .ghostOnDark { color: #fff !important; border-color: rgba(255, 255, 255, 0.35) !important; background: transparent !important; }
 .ghostOnDark:hover:not(:disabled) { border-color: var(--coral) !important; color: #fff !important; }
 .requestBand aside { background: var(--card-solid); backdrop-filter: none; -webkit-backdrop-filter: none; }
-@media (max-width: 900px) { .heroGrid { grid-template-columns: 1fr; } .stage { justify-self: center; max-width: 440px; } }
+@media (max-width: 900px) { .heroGrid { grid-template-columns: 1fr; } .stageWrap { justify-self: center; max-width: 440px; } }
 .tile { position: relative; isolation: isolate; overflow: hidden; }
 .tile::before { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0; pointer-events: none; background-image: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%), var(--glow-color), transparent 65%); transition: opacity var(--dur-2) var(--ease); }
 .tile:hover::before { opacity: 1; }

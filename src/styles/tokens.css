@@ -63,9 +63,9 @@
   --bubble: rgba(255, 255, 255, 0.55);
   --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23C93216' stroke-width='1.8'/%3E%3C/svg%3E");
   --dialog-shadow: 0 30px 80px -20px rgba(14, 58, 61, 0.5);
-  --glow-color: rgba(255, 90, 60, 0.12);
-  --spot-core: rgba(70, 201, 191, 0.42);
-  --spot-mid: rgba(15, 157, 138, 0.16);
+  --glow-color: rgba(255, 90, 60, 0.05);
+  --spot-core: rgba(70, 201, 191, 0.1);
+  --spot-mid: rgba(15, 157, 138, 0.03);
   --cursor-ring: rgba(255, 90, 60, 0.9);
   --cursor-fill: rgba(255, 90, 60, 0.14);
 
@@ -152,9 +152,9 @@
   --bubble: rgba(255, 255, 255, 0.25);
   --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23FF8A73' stroke-width='1.8'/%3E%3C/svg%3E");
   --dialog-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7);
-  --glow-color: rgba(255, 138, 115, 0.14);
-  --spot-core: rgba(70, 201, 191, 0.3);
-  --spot-mid: rgba(47, 195, 174, 0.12);
+  --glow-color: rgba(255, 138, 115, 0.05);
+  --spot-core: rgba(70, 201, 191, 0.08);
+  --spot-mid: rgba(47, 195, 174, 0.025);
   --cursor-ring: rgba(255, 138, 115, 0.95);
   --cursor-fill: rgba(255, 138, 115, 0.16);
 

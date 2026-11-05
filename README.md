@@ -99,6 +99,15 @@ The visual language follows the "Medusa JF-4 field simulator" reference, adapted
 - `PointerEffects` (`src/components/layout/`) adds a teal spotlight with a faint dot grid, plus a coral ring and dot that grow over controls, shrink on press and become an I-beam over text inputs. Elements marked `data-glow` also get a highlight that follows the pointer. It is visible in light and dark mode, runs on one `requestAnimationFrame` loop, and is disabled for touch devices and under `prefers-reduced-motion`.
 - Pages fade/slide in on navigation (`PageTransition`), lists stagger in, and switching theme cross-fades colours.
 - Logo: `src/components/ui/Logo.tsx` (a coral tile with an Erlenmeyer flask, animated liquid and bubbles, and a rising trade arrow). The static version is `public/favicon.svg`.
+- **Scroll motion** (`src/components/motion/`, built on `motion/react`; no colors involved):
+  - `ScrollLayer` moves, scales and fades the hero text and figure at different speeds as you scroll away.
+  - `BackgroundWord` is oversized type behind each home section that drifts sideways.
+  - `SectionHead` is an eyebrow, a heading that rises word by word, and a lede.
+  - `FloatItem` / `Parallax` are cards that slide in from alternating sides and drift at column-dependent speeds.
+  - `ScrollScale` is the request band, which grows into view.
+  - `ScrollProgress` is a thin bar at the top.
+  - `Reveal` (`components/ui`) is the shared fade/slide-in, with `up`, `start`, `end` and `scale` variants. `start` and `end` mirror in RTL, and sub-page headers use it on mount.
+  - All of it is spring-smoothed, shortened on small screens, and replaced by static content under `prefers-reduced-motion`.
 - All animation is disabled under `prefers-reduced-motion`.
 ## Product images
 

@@ -8,22 +8,22 @@
 
 /* Light under the content: a teal glow plus a faint dot grid revealed only around the pointer. */
 .spot { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(520px circle at var(--sx, 50%) var(--sy, 30%), var(--spot-core), var(--spot-mid) 45%, transparent 70%);
+  background: radial-gradient(240px circle at var(--sx, 50%) var(--sy, 30%), var(--spot-core), var(--spot-mid) 40%, transparent 70%);
 }
 .spot::after { content: ''; position: absolute; inset: 0;
   background-image: radial-gradient(var(--cursor-ring) 1px, transparent 1.4px);
-  background-size: 26px 26px; opacity: 0.5;
-  -webkit-mask-image: radial-gradient(240px circle at var(--sx, 50%) var(--sy, 30%), #000, transparent 100%);
-  mask-image: radial-gradient(240px circle at var(--sx, 50%) var(--sy, 30%), #000, transparent 100%);
+  background-size: 26px 26px; opacity: 0.25;
+  -webkit-mask-image: radial-gradient(130px circle at var(--sx, 50%) var(--sy, 30%), #000, transparent 100%);
+  mask-image: radial-gradient(130px circle at var(--sx, 50%) var(--sy, 30%), #000, transparent 100%);
 }
 
 .ring, .dot { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; }
-.ring { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--cursor-ring); background: var(--cursor-fill);
+.ring { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--cursor-ring); background: transparent;
   translate: calc(var(--rx, -100px) - 50%) calc(var(--ry, -100px) - 50%);
   transition: opacity var(--dur-3) var(--ease), width var(--dur-2) var(--ease-spring), height var(--dur-2) var(--ease-spring), background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), border-radius var(--dur-2) var(--ease); }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--coral); translate: calc(var(--ax, -100px) - 50%) calc(var(--ay, -100px) - 50%); }
-.root[data-hover='true'] .ring { width: 56px; height: 56px; border-color: var(--coral); }
+.root[data-hover='true'] .ring { width: 34px; height: 34px; border-color: var(--coral); }
 .root[data-hover='true'] .dot { opacity: 0.3; }
-.root[data-down='true'] .ring { width: 24px; height: 24px; background: var(--cursor-ring); }
+.root[data-down='true'] .ring { width: 16px; height: 16px; background: var(--cursor-fill); }
 .root[data-text='true'] .ring { width: 3px; height: 28px; border-radius: 2px; background: var(--cursor-ring); border-color: transparent; }
 .root[data-text='true'] .dot { opacity: 0; }

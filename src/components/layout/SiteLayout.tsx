@@ -4,6 +4,7 @@ import { useI18n } from '@/i18n/I18nProvider';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { PointerEffects } from './PointerEffects';
+import { ScrollProgress } from '@/components/motion/ScrollProgress';
 
 function ScrollManager() {
   const { pathname, hash } = useLocation();
@@ -35,6 +36,7 @@ export function SiteLayout() {
       <a href="#main" className="skip-link">{t('a11y.skip')}</a>
       <ScrollManager />
       <PointerEffects />
+      <ScrollProgress />
       <Header />
       <main id="main" tabIndex={-1}>
         <PageTransition />
